@@ -9,19 +9,57 @@ namespace SuperHeroAPI.Controllers
     {
         private static List<SuperHero> heroes = new List<SuperHero>
             {
-                new SuperHero {
+                new SuperHero 
+                {
                     Id = 1,
                     Name = "QuailMan",
                     FirstName = "Doug",
                     LastName = "Funnie",
                     Place = "Bluffington"
+                },
+                new SuperHero
+                {
+                    Id = 2,
+                    Name = "Captain Medium",
+                    FirstName = "Bill",
+                    LastName = "Pickles",
+                    Place = "Des Moines"
                 }
             };
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SuperHero>> Get(int id)
+        {
+            var hero = heroes.Find(h => h.Id == id);
+            if(hero == null)
+            {
+                return BadRequest("Hero not found.");
+            }
+
+            return Ok(hero);
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> Get()
         {
             return Ok(heroes);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<SuperHero>> UpdateHero(SuperHero request)
+        {
+            var hero = heroes.Find(h => h.Id == request.Id);
+            if (hero == null)
+            {
+                return BadRequest("Hero not found.");
+            }
+
+            hero.Name = request.Name;
+            hero.FirstName = request.FirstName;
+            hero.LastName = request.LastName;
+            hero.Place = request.Place;
+
+            return Ok(hero);
         }
 
         [HttpPost]
